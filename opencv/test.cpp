@@ -10,14 +10,14 @@ using namespace cv;
 const int CC_SIZE = 16;
 const int SAFE_WIDTH = 10;
 const int CC_NUMBER = 15;
-// ĞÕÃû
-unsigned char name[7] ="ÍõÎ¾Ãú";
+// å§“å
+unsigned char name[7] ="ç‹å°‰é“­";
 unsigned int name_code[3][2];
 
-// Ñ§ºÅ
+// å­¦å·
 unsigned int id_code[12][2] = { { 0xa3, 0xb6 },{ 0xa3, 0xb3 },{ 0xa3, 0xb1 },{ 0xa3, 0xb6 },{ 0xa3, 0xb0 },{ 0xa3, 0xb7 },{ 0xa3, 0xb0 },{ 0xa3, 0xb4 },{ 0xa3, 0xb0 },{ 0xa3, 0xb3 },{ 0xa3, 0xb0 },{ 0xa3, 0xb5} };
 
-// ±£´æ×Ö½ÚµÄÊı×é
+// ä¿å­˜å­—èŠ‚çš„æ•°ç»„
 unsigned char mat[16][2];
 
 FILE* HZK16;
@@ -39,20 +39,20 @@ int main()
 //	scanf("%s", &name);
 	open_file();
 	get_area_position_codes();
-	// Ğ´Ãû×Ö
+	// å†™åå­—
 	int i, j;
 	for (i = 0; i < 3; ++i)
 	{
 		get_mat(name_code[i][0], name_code[i][1]);
 		draw_one_cc(i);
 	}
-	// Ğ´Ñ§ºÅ
+	// å†™å­¦å·
 	for (j = 0; j < 12; ++j)
 	{
 		get_mat(id_code[j][0] - 0xa0, id_code[j][1] - 0xa0);
 		draw_one_cc(i + j);
 	}
-	// ÏÔÊ¾Í¼Æ¬
+	// æ˜¾ç¤ºå›¾ç‰‡
 	cvShowImage("IMAGE", img);
 	cvWaitKey(0);
 	release();
@@ -70,7 +70,7 @@ void get_mat(int a_code, int p_code)
 {
 	long offset;
 	offset = (94 * (a_code - 1) + (p_code - 1)) * 32L;
-	// ¶ÁÈ¡Êı¾İ´æÈëÊı×é
+	// è¯»å–æ•°æ®å­˜å…¥æ•°ç»„
 	fseek(HZK16, offset, SEEK_SET);
 	fread(mat, 32, 1, HZK16);
 }
@@ -81,24 +81,24 @@ void open_file()
 	getcwd(pbuf, 100);
 	cout<<pbuf<<endl;
 	strcat(pbuf, "/HZKf1616.hz");
-	// ¶ÁÈ¡Í¼Æ¬
+	// è¯»å–å›¾ç‰‡
 	if ((img = cvLoadImage("test.jpg")) == NULL)exit(1);
-	// ´ò¿ª×ÖÌåÎÄ¼ş
+	// æ‰“å¼€å­—ä½“æ–‡ä»¶
 	if ((HZK16 = fopen(pbuf, "rb")) == NULL)exit(1);
 }
 
 void draw_one_cc(int num)
 {
-	// Í¼Æ¬µÄÏñËØÖµ
+	// å›¾ç‰‡çš„åƒç´ å€¼
 	int width, height;
 	width = img->width;
 	height = img->height;
-	// ¿ªÊ¼µÄx yÏñËØµã
+	// å¼€å§‹çš„x yåƒç´ ç‚¹
 	int start_x, start_y, size, current_start_x, current_start_y;
 	size = CC_SIZE + SAFE_WIDTH;
 	start_x = width - CC_NUMBER * size;
 	start_y = height - CC_SIZE - SAFE_WIDTH;
-	// ¿ªÊ¼»æÖÆ
+	// å¼€å§‹ç»˜åˆ¶
 
 	CvScalar cs;
 	for (int i = 0; i < 16; ++i)
@@ -107,7 +107,7 @@ void draw_one_cc(int num)
 				if (mat[i][j] & (0x80 >> k))
 				{
 					cout << mat[i][j] << endl;
-					// »æµã
+					// ç»˜ç‚¹
 					current_start_x = j * 8 + k + start_x + size * num;
 					current_start_y = start_y + i;
 					cs = cvGet2D(img, current_start_y, current_start_x);
